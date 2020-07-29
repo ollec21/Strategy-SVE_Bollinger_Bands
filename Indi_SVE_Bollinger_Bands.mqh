@@ -22,7 +22,7 @@
 // Includes.
 #include <EA31337-classes/Indicator.mqh>
 
-// Indicator line identifiers used in SVEBand.
+// Indicator line identifiers used in the indicator.
 enum ENUM_SVE_BAND_LINE {
   SVE_BAND_BASE = 0,   // Main line.
   SVE_BAND_UPPER = 1,  // Upper limit.
@@ -31,7 +31,7 @@ enum ENUM_SVE_BAND_LINE {
 };
 
 // Structs.
-struct SVEBandParams : IndicatorParams {
+struct SVEBBandsParams : IndicatorParams {
   // Indicator params.
   int TEMAPeriod;
   int SvePeriod;
@@ -39,15 +39,15 @@ struct SVEBandParams : IndicatorParams {
   double BBDnDeviations;
   int DeviationsPeriod;
   // Struct constructor.
-  void SVEBandParams(int _tema_period, int _sve_period, double _deviations_up, double _deviations_down,
-                     int _deviations_period, int _shift)
+  void SVEBBandsParams(int _tema_period, int _sve_period, double _deviations_up, double _deviations_down,
+                       int _deviations_period, int _shift)
       : TEMAPeriod(_tema_period),
         SvePeriod(_sve_period),
         BBUpDeviations(_deviations_up),
         BBDnDeviations(_deviations_down),
         DeviationsPeriod(_deviations_period) {
     max_modes = FINAL_SVE_BAND_LINE_ENTRY;
-    custom_indi_name = "Indicators\\SVE_Bollinger_Band";
+    custom_indi_name = "Indi_SVE_Bollinger_Bands";
     SetDataValueType(TYPE_DOUBLE);
   };
   // Getters.
@@ -67,21 +67,21 @@ struct SVEBandParams : IndicatorParams {
 /**
  * Implements indicator class.
  */
-class Indi_SVEBand : public Indicator {
+class Indi_SVE_Bollinger_Bands : public Indicator {
  protected:
   // Structs.
-  SVEBandParams params;
+  SVEBBandsParams params;
 
  public:
   /**
    * Class constructor.
    */
-  Indi_SVEBand(SVEBandParams &_p)
+  Indi_SVE_Bollinger_Bands(SVEBBandsParams &_p)
       : params(_p.TEMAPeriod, _p.SvePeriod, _p.BBUpDeviations, _p.BBDnDeviations, _p.DeviationsPeriod, _p.shift),
         Indicator((IndicatorParams)_p) {
     params = _p;
   }
-  Indi_SVEBand(SVEBandParams &_p, ENUM_TIMEFRAMES _tf)
+  Indi_SVE_Bollinger_Bands(SVEBBandsParams &_p, ENUM_TIMEFRAMES _tf)
       : params(_p.TEMAPeriod, _p.SvePeriod, _p.BBUpDeviations, _p.BBDnDeviations, _p.DeviationsPeriod, _p.shift),
         Indicator(NULL, _tf) {
     params = _p;

@@ -4,4 +4,4 @@
  */
 
 // Includes the main file.
-#include "SVE_Bollinger_Band.mq4"
+#include "Indi_SVE_Bollinger_Bands.mq4"
