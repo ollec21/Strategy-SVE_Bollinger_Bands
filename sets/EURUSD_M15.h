@@ -1,17 +1,28 @@
+/*
+ * @file
+ * Defines strategy's and indicator's default parameter values
+ * for the given pair symbol and timeframe.
+ */
+
+// Defines indicator's parameter values for the given pair symbol and timeframe.
+struct Indi_SVE_Bollinger_Bands_Params_M15 : Indi_SVE_Bollinger_Bands_Params {
+  Indi_SVE_Bollinger_Bands_Params_M15() : Indi_SVE_Bollinger_Bands_Params(indi_svebbands_defaults) { shift = 0; }
+} indi_svebbands_m15;
+
 // Defines strategy's parameter values for the given pair symbol and timeframe.
-struct Stg_SVE_Bollinger_Bands_EURUSD_M15_Params : Stg_SVE_Bollinger_Bands_Params {
-  Stg_SVE_Bollinger_Bands_EURUSD_M15_Params() {
-    SVE_Bollinger_Bands_LotSize = lot_size = 0;
-    SVE_Bollinger_Bands_Shift = 0;
-    SVE_Bollinger_Bands_SignalOpenMethod = signal_open_method = 0;
-    SVE_Bollinger_Bands_SignalOpenFilterMethod = signal_open_filter = 1;
-    SVE_Bollinger_Bands_SignalOpenLevel = signal_open_level = 0;
-    SVE_Bollinger_Bands_SignalOpenBoostMethod = signal_open_boost = 0;
-    SVE_Bollinger_Bands_SignalCloseMethod = signal_close_method = 0;
-    SVE_Bollinger_Bands_SignalCloseLevel = signal_close_level = 0;
-    SVE_Bollinger_Bands_PriceLimitMethod = price_limit_method = 0;
-    SVE_Bollinger_Bands_PriceLimitLevel = price_limit_level = 2;
-    SVE_Bollinger_Bands_TickFilterMethod = tick_filter_method = 1;
-    SVE_Bollinger_Bands_MaxSpread = max_spread = 0;
+struct Stg_SVE_Bollinger_Bands_Params_M15 : StgParams {
+  // Struct constructor.
+  Stg_SVE_Bollinger_Bands_Params_M15() : StgParams(stg_svebbands_defaults) {
+    lot_size = 0;
+    signal_open_method = 0;
+    signal_open_filter = 1;
+    signal_open_level = 0;
+    signal_open_boost = 0;
+    signal_close_method = 0;
+    signal_close_level = 0;
+    price_limit_method = 0;
+    price_limit_level = 2;
+    tick_filter_method = 1;
+    max_spread = 0;
   }
 } stg_svebbands_m15;

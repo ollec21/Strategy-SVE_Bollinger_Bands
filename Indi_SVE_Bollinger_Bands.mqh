@@ -31,16 +31,16 @@ enum ENUM_SVE_BAND_LINE {
 };
 
 // Structs.
-struct SVEBBandsParams : IndicatorParams {
+struct Indi_SVE_Bollinger_Bands_Params : IndicatorParams {
   // Indicator params.
   int TEMAPeriod;
   int SvePeriod;
   double BBUpDeviations;
   double BBDnDeviations;
   int DeviationsPeriod;
-  // Struct constructor.
-  void SVEBBandsParams(int _tema_period, int _sve_period, double _deviations_up, double _deviations_down,
-                       int _deviations_period, int _shift)
+  // Struct constructors.
+  void Indi_SVE_Bollinger_Bands_Params(int _tema_period, int _sve_period, double _deviations_up,
+                                       double _deviations_down, int _deviations_period, int _shift)
       : TEMAPeriod(_tema_period),
         SvePeriod(_sve_period),
         BBUpDeviations(_deviations_up),
@@ -50,6 +50,7 @@ struct SVEBBandsParams : IndicatorParams {
     custom_indi_name = "Indi_SVE_Bollinger_Bands";
     SetDataValueType(TYPE_DOUBLE);
   };
+  void Indi_SVE_Bollinger_Bands_Params(Indi_SVE_Bollinger_Bands_Params &_params) { this = _params; }
   // Getters.
   int GetTEMAPeriod() { return TEMAPeriod; }
   int GetSvePeriod() { return SvePeriod; }
@@ -70,18 +71,18 @@ struct SVEBBandsParams : IndicatorParams {
 class Indi_SVE_Bollinger_Bands : public Indicator {
  protected:
   // Structs.
-  SVEBBandsParams params;
+  Indi_SVE_Bollinger_Bands_Params params;
 
  public:
   /**
    * Class constructor.
    */
-  Indi_SVE_Bollinger_Bands(SVEBBandsParams &_p)
+  Indi_SVE_Bollinger_Bands(Indi_SVE_Bollinger_Bands_Params &_p)
       : params(_p.TEMAPeriod, _p.SvePeriod, _p.BBUpDeviations, _p.BBDnDeviations, _p.DeviationsPeriod, _p.shift),
         Indicator((IndicatorParams)_p) {
     params = _p;
   }
-  Indi_SVE_Bollinger_Bands(SVEBBandsParams &_p, ENUM_TIMEFRAMES _tf)
+  Indi_SVE_Bollinger_Bands(Indi_SVE_Bollinger_Bands_Params &_p, ENUM_TIMEFRAMES _tf)
       : params(_p.TEMAPeriod, _p.SvePeriod, _p.BBUpDeviations, _p.BBDnDeviations, _p.DeviationsPeriod, _p.shift),
         Indicator(NULL, _tf) {
     params = _p;
