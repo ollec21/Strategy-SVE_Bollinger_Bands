@@ -1,3 +1,3 @@
-# Strategy TMA Band SVE True
+# Strategy SVE Bollinger Bands
 
-Implements TMA Band SVE True strategy.
+Strategy based on SVE Bollinger Bands indicator.

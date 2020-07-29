@@ -22,34 +22,36 @@
 // Includes.
 #include <EA31337-classes/Indicator.mqh>
 
-// Indicator line identifiers used in SVEBand.
+// Indicator line identifiers used in the indicator.
 enum ENUM_SVE_BAND_LINE {
-  SVE_BAND_BASE = 0,   // Main line.
+  SVE_BAND_MAIN = 0,   // Main line.
   SVE_BAND_UPPER = 1,  // Upper limit.
   SVE_BAND_LOWER = 2,  // Lower limit.
   FINAL_SVE_BAND_LINE_ENTRY,
 };
 
 // Structs.
-struct SVEBandParams : IndicatorParams {
+struct Indi_SVE_Bollinger_Bands_Params : IndicatorParams {
   // Indicator params.
   int TEMAPeriod;
   int SvePeriod;
   double BBUpDeviations;
   double BBDnDeviations;
   int DeviationsPeriod;
-  // Struct constructor.
-  void SVEBandParams(int _tema_period, int _sve_period, double _deviations_up, double _deviations_down,
-                     int _deviations_period, int _shift)
+  // Struct constructors.
+  void Indi_SVE_Bollinger_Bands_Params(int _tema_period, int _sve_period, double _deviations_up,
+                                       double _deviations_down, int _deviations_period, int _shift)
       : TEMAPeriod(_tema_period),
         SvePeriod(_sve_period),
         BBUpDeviations(_deviations_up),
         BBDnDeviations(_deviations_down),
         DeviationsPeriod(_deviations_period) {
     max_modes = FINAL_SVE_BAND_LINE_ENTRY;
-    custom_indi_name = "Indicators\\SVE_Bollinger_Band";
+    custom_indi_name = "Indi_SVE_Bollinger_Bands";
+    SetDataSourceType(IDATA_ICUSTOM);
     SetDataValueType(TYPE_DOUBLE);
   };
+  void Indi_SVE_Bollinger_Bands_Params(Indi_SVE_Bollinger_Bands_Params &_params) { this = _params; }
   // Getters.
   int GetTEMAPeriod() { return TEMAPeriod; }
   int GetSvePeriod() { return SvePeriod; }
@@ -67,21 +69,21 @@ struct SVEBandParams : IndicatorParams {
 /**
  * Implements indicator class.
  */
-class Indi_SVEBand : public Indicator {
+class Indi_SVE_Bollinger_Bands : public Indicator {
  protected:
   // Structs.
-  SVEBandParams params;
+  Indi_SVE_Bollinger_Bands_Params params;
 
  public:
   /**
    * Class constructor.
    */
-  Indi_SVEBand(SVEBandParams &_p)
+  Indi_SVE_Bollinger_Bands(Indi_SVE_Bollinger_Bands_Params &_p)
       : params(_p.TEMAPeriod, _p.SvePeriod, _p.BBUpDeviations, _p.BBDnDeviations, _p.DeviationsPeriod, _p.shift),
         Indicator((IndicatorParams)_p) {
     params = _p;
   }
-  Indi_SVEBand(SVEBandParams &_p, ENUM_TIMEFRAMES _tf)
+  Indi_SVE_Bollinger_Bands(Indi_SVE_Bollinger_Bands_Params &_p, ENUM_TIMEFRAMES _tf)
       : params(_p.TEMAPeriod, _p.SvePeriod, _p.BBUpDeviations, _p.BBDnDeviations, _p.DeviationsPeriod, _p.shift),
         Indicator(NULL, _tf) {
     params = _p;
