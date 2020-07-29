@@ -24,7 +24,7 @@
 
 // Indicator line identifiers used in the indicator.
 enum ENUM_SVE_BAND_LINE {
-  SVE_BAND_BASE = 0,   // Main line.
+  SVE_BAND_MAIN = 0,   // Main line.
   SVE_BAND_UPPER = 1,  // Upper limit.
   SVE_BAND_LOWER = 2,  // Lower limit.
   FINAL_SVE_BAND_LINE_ENTRY,
@@ -48,6 +48,7 @@ struct Indi_SVE_Bollinger_Bands_Params : IndicatorParams {
         DeviationsPeriod(_deviations_period) {
     max_modes = FINAL_SVE_BAND_LINE_ENTRY;
     custom_indi_name = "Indi_SVE_Bollinger_Bands";
+    SetDataSourceType(IDATA_ICUSTOM);
     SetDataValueType(TYPE_DOUBLE);
   };
   void Indi_SVE_Bollinger_Bands_Params(Indi_SVE_Bollinger_Bands_Params &_params) { this = _params; }

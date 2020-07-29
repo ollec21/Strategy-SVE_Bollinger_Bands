@@ -113,13 +113,14 @@ class Stg_SVE_Bollinger_Bands : public Strategy {
       // Returns false when indicator data is not valid.
       return false;
     }
-    double _value = _indi[CURR].value[SVE_BAND_BASE];
     switch (_cmd) {
       case ORDER_TYPE_BUY:
         // Buy signal.
+        _result = _indi[CURR].value[SVE_BAND_MAIN] > _indi[CURR].value[SVE_BAND_UPPER];
         break;
       case ORDER_TYPE_SELL:
         // Sell signal.
+        _result = _indi[CURR].value[SVE_BAND_MAIN] < _indi[CURR].value[SVE_BAND_LOWER];
         break;
     }
     return _result;
