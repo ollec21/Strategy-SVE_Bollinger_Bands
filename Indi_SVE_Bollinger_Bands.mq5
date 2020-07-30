@@ -30,16 +30,13 @@ int IndicatorCounted(int _value = 0) {
 }
 
 // Custom indicator iteration function.
-int OnCalculate(const int rates_total,
-                const int prev_calculated,
-                const int begin,
-                const double &price[]) {
+int OnCalculate(const int rates_total, const int prev_calculated, const int begin, const double &price[]) {
   if (begin > 0) PlotIndexSetInteger(0, PLOT_DRAW_BEGIN, begin + SvePeriod);
   if (begin > 0) PlotIndexSetInteger(1, PLOT_DRAW_BEGIN, begin + SvePeriod);
   if (begin > 0) PlotIndexSetInteger(2, PLOT_DRAW_BEGIN, begin + SvePeriod);
   int pos = fmax(0, prev_calculated - 1);
   IndicatorCounted(prev_calculated);
-  for(int i=pos;i<rates_total && !IsStopped();i++) {
+  for (int i = pos; i < rates_total && !IsStopped(); i++) {
     start();
   }
   return (rates_total);
