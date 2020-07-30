@@ -93,7 +93,7 @@ int OnCalculate(const int rates_total, const int prev_calculated, const datetime
                 const double &high[], const double &low[], const double &close[], const long &tick_volume[],
                 const long &volume[], const int &spread[]) {
 #else
-int OnCalculate(const int rates_total, const int prev_calculated, const int begin, const double& price[]) {
+int OnCalculate(const int rates_total, const int prev_calculated, const int begin, const double &price[]) {
   if (begin > 0) PlotIndexSetInteger(0, PLOT_DRAW_BEGIN, begin + SvePeriod);
   if (begin > 0) PlotIndexSetInteger(1, PLOT_DRAW_BEGIN, begin + SvePeriod);
   if (begin > 0) PlotIndexSetInteger(2, PLOT_DRAW_BEGIN, begin + SvePeriod);
@@ -144,7 +144,9 @@ int OnCalculate(const int rates_total, const int prev_calculated, const int begi
   for (i = limit; i >= 0; i--) {
     double sdev = iDeviation(tmaZima, SvePeriod, i);
     if (sdev != 0)
-      svePerB[i] = 25.0 * (tmaZima[i] + 2.0 * sdev - iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_LWMA, i)) / sdev;
+      svePerB[i] = 25.0 *
+                   (tmaZima[i] + 2.0 * sdev - iMAOnArray(tmaZima, SvePeriod * SvePeriod, SvePeriod, 0, MODE_LWMA, i)) /
+                   sdev;
     else
       svePerB[i] = 0;
     sdev = iDeviation(svePerB, DeviationsPeriod, i);
@@ -160,7 +162,7 @@ int OnCalculate(const int rates_total, const int prev_calculated, const int begi
   //
   //
 
-  return (0);
+  return (rates_total);
 }
 
 //+------------------------------------------------------------------+
