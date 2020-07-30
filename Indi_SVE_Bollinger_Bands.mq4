@@ -57,11 +57,16 @@ int init() {
   SetIndexBuffer(0, bbValue);
   SetIndexBuffer(1, bbUpper);
   SetIndexBuffer(2, bbLower);
-  SetIndexBuffer(3, tmaZima);
-  SetIndexBuffer(4, svePerB);
+  SetIndexBuffer(3, tmaZima, INDICATOR_CALCULATIONS);
+  SetIndexBuffer(4, svePerB, INDICATOR_CALCULATIONS);
   alpha = 2.0 / (1.0 + TEMAPeriod);
   IndicatorShortName("SVE bollinger band (" + (string) TEMAPeriod + "," + (string) SvePeriod + "," + DoubleToStr(BBUpDeviations, 2) +
                      "," + DoubleToStr(BBDnDeviations, 2) + ")");
+#ifdef _MQL5__
+  PlotIndexSetInteger(0, PLOT_DRAW_BEGIN, 0);
+  PlotIndexSetInteger(1, PLOT_DRAW_BEGIN, 0);
+  PlotIndexSetInteger(2, PLOT_DRAW_BEGIN, 0);
+#endif
   return (0);
 }
 int deinit() { return (0); }
@@ -83,10 +88,20 @@ int deinit() { return (0); }
 //
 //
 
+#ifdef __MQL4__
 int OnCalculate(const int rates_total, const int prev_calculated, const datetime &time[], const double &open[],
                 const double &high[], const double &low[], const double &close[], const long &tick_volume[],
                 const long &volume[], const int &spread[]) {
-  int counted_bars = prev_calculated;
+#else
+int OnCalculate(const int rates_total,
+                const int prev_calculated,
+                const int begin,
+                const double &price[]) {
+  if(begin>0) PlotIndexSetInteger(0,PLOT_DRAW_BEGIN,begin+SvePeriod);
+  if(begin>0) PlotIndexSetInteger(1,PLOT_DRAW_BEGIN,begin+SvePeriod);
+  if(begin>0) PlotIndexSetInteger(2,PLOT_DRAW_BEGIN,begin+SvePeriod);
+#endif
+  int counted_bars = Bars;
   int i, r, limit;
 
   if (counted_bars < 0) return (-1);
