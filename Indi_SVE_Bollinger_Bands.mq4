@@ -62,11 +62,6 @@ int init() {
   alpha = 2.0 / (1.0 + TEMAPeriod);
   IndicatorShortName("SVE bollinger band (" + (string)TEMAPeriod + "," + (string)SvePeriod + "," +
                      DoubleToStr(BBUpDeviations, 2) + "," + DoubleToStr(BBDnDeviations, 2) + ")");
-#ifdef _MQL5__
-  PlotIndexSetInteger(0, PLOT_DRAW_BEGIN, 0);
-  PlotIndexSetInteger(1, PLOT_DRAW_BEGIN, 0);
-  PlotIndexSetInteger(2, PLOT_DRAW_BEGIN, 0);
-#endif
   return (0);
 }
 int deinit() { return (0); }
@@ -135,9 +130,7 @@ int start() {
   for (i = limit; i >= 0; i--) {
     double sdev = iDeviation(tmaZima, SvePeriod, i);
     if (sdev != 0)
-      svePerB[i] = 25.0 *
-                   (tmaZima[i] + 2.0 * sdev - iMAOnArray(tmaZima, SvePeriod * SvePeriod, SvePeriod, 0, MODE_LWMA, i)) /
-                   sdev;
+      svePerB[i] = 25.0 * (tmaZima[i] + 2.0 * sdev - iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_LWMA, i)) / sdev;
     else
       svePerB[i] = 0;
     sdev = iDeviation(svePerB, DeviationsPeriod, i);
@@ -178,15 +171,15 @@ double averagePrice(int i) {
 //
 //
 
-double iDeviation(double &array[], int period, int pos) {
+double iDeviation(double& array[], int period, int pos) {
   double dMA = iSma(array, period, pos);
   double dSum = 0;
-  for (int i = 0; i < period; i++, pos++) dSum += (array[pos] - dMA) * (array[pos] - dMA);
+  for (int i = 0; i < period && pos < ArrayRange(array, 0); i++, pos++) dSum += (array[pos] - dMA) * (array[pos] - dMA);
   return (MathSqrt(dSum / period));
 }
-double iSma(double &array[], int period, int pos) {
+double iSma(double& array[], int period, int pos) {
   double sum = 0.0;
-  for (int i = 0; i < period; i++, pos++) sum += array[pos];
+  for (int i = 0; i < period && pos < ArrayRange(array, 0); i++, pos++) sum += array[pos];
   return (sum / period);
 }
 
