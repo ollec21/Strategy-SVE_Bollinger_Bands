@@ -83,14 +83,16 @@ int deinit() { return (0); }
 //
 //
 
-int start() {
-  int counted_bars = IndicatorCounted();
+int OnCalculate(const int rates_total, const int prev_calculated, const datetime &time[], const double &open[],
+                const double &high[], const double &low[], const double &close[], const long &tick_volume[],
+                const long &volume[], const int &spread[]) {
+  int counted_bars = prev_calculated;
   int i, r, limit;
 
   if (counted_bars < 0) return (-1);
   if (counted_bars > 0) counted_bars--;
-  limit = MathMin(Bars - counted_bars, Bars - 1);
-  if (ArrayRange(tBuffer, 0) != Bars) ArrayResize(tBuffer, Bars);
+  limit = MathMin(rates_total - counted_bars, rates_total - 1);
+  if (ArrayRange(tBuffer, 0) != rates_total) ArrayResize(tBuffer, rates_total);
 
   //
   //
@@ -98,8 +100,8 @@ int start() {
   //
   //
 
-  for (i = limit, r = Bars - i - 1; i >= 0; i--, r++) {
-    if (i == (Bars - 1)) {
+  for (i = limit, r = rates_total - i - 1; i >= 0; i--, r++) {
+    if (i == (rates_total - 1)) {
       tBuffer[r][__haOpen] = averagePrice(i);
       continue;
     }
