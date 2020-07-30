@@ -88,23 +88,14 @@ int deinit() { return (0); }
 //
 //
 
-#ifdef __MQL4__
-int OnCalculate(const int rates_total, const int prev_calculated, const datetime &time[], const double &open[],
-                const double &high[], const double &low[], const double &close[], const long &tick_volume[],
-                const long &volume[], const int &spread[]) {
-#else
-int OnCalculate(const int rates_total, const int prev_calculated, const int begin, const double &price[]) {
-  if (begin > 0) PlotIndexSetInteger(0, PLOT_DRAW_BEGIN, begin + SvePeriod);
-  if (begin > 0) PlotIndexSetInteger(1, PLOT_DRAW_BEGIN, begin + SvePeriod);
-  if (begin > 0) PlotIndexSetInteger(2, PLOT_DRAW_BEGIN, begin + SvePeriod);
-#endif
-  int counted_bars = Bars;
+int start() {
+  int counted_bars = IndicatorCounted();
   int i, r, limit;
 
   if (counted_bars < 0) return (-1);
   if (counted_bars > 0) counted_bars--;
-  limit = MathMin(rates_total - counted_bars, rates_total - 1);
-  if (ArrayRange(tBuffer, 0) != rates_total) ArrayResize(tBuffer, rates_total);
+  limit = MathMin(Bars - counted_bars, Bars - 1);
+  if (ArrayRange(tBuffer, 0) != Bars) ArrayResize(tBuffer, Bars);
 
   //
   //
@@ -112,8 +103,8 @@ int OnCalculate(const int rates_total, const int prev_calculated, const int begi
   //
   //
 
-  for (i = limit, r = rates_total - i - 1; i >= 0; i--, r++) {
-    if (i == (rates_total - 1)) {
+  for (i = limit, r = Bars - i - 1; i >= 0; i--, r++) {
+    if (i == (Bars - 1)) {
       tBuffer[r][__haOpen] = averagePrice(i);
       continue;
     }
@@ -162,7 +153,7 @@ int OnCalculate(const int rates_total, const int prev_calculated, const int begi
   //
   //
 
-  return (rates_total);
+  return (0);
 }
 
 //+------------------------------------------------------------------+
