@@ -6,7 +6,7 @@
 // Defines indicator properties.
 #property indicator_separate_window
 #property indicator_buffers 5
-#property indicator_plots   3
+#property indicator_plots 3
 #property indicator_color1 DeepSkyBlue
 #property indicator_color2 LimeGreen
 #property indicator_color3 Red

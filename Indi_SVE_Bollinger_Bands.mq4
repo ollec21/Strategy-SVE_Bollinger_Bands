@@ -60,8 +60,8 @@ int init() {
   SetIndexBuffer(3, tmaZima, INDICATOR_CALCULATIONS);
   SetIndexBuffer(4, svePerB, INDICATOR_CALCULATIONS);
   alpha = 2.0 / (1.0 + TEMAPeriod);
-  IndicatorShortName("SVE bollinger band (" + (string) TEMAPeriod + "," + (string) SvePeriod + "," + DoubleToStr(BBUpDeviations, 2) +
-                     "," + DoubleToStr(BBDnDeviations, 2) + ")");
+  IndicatorShortName("SVE bollinger band (" + (string)TEMAPeriod + "," + (string)SvePeriod + "," +
+                     DoubleToStr(BBUpDeviations, 2) + "," + DoubleToStr(BBDnDeviations, 2) + ")");
 #ifdef _MQL5__
   PlotIndexSetInteger(0, PLOT_DRAW_BEGIN, 0);
   PlotIndexSetInteger(1, PLOT_DRAW_BEGIN, 0);
@@ -93,13 +93,10 @@ int OnCalculate(const int rates_total, const int prev_calculated, const datetime
                 const double &high[], const double &low[], const double &close[], const long &tick_volume[],
                 const long &volume[], const int &spread[]) {
 #else
-int OnCalculate(const int rates_total,
-                const int prev_calculated,
-                const int begin,
-                const double &price[]) {
-  if(begin>0) PlotIndexSetInteger(0,PLOT_DRAW_BEGIN,begin+SvePeriod);
-  if(begin>0) PlotIndexSetInteger(1,PLOT_DRAW_BEGIN,begin+SvePeriod);
-  if(begin>0) PlotIndexSetInteger(2,PLOT_DRAW_BEGIN,begin+SvePeriod);
+int OnCalculate(const int rates_total, const int prev_calculated, const int begin, const double& price[]) {
+  if (begin > 0) PlotIndexSetInteger(0, PLOT_DRAW_BEGIN, begin + SvePeriod);
+  if (begin > 0) PlotIndexSetInteger(1, PLOT_DRAW_BEGIN, begin + SvePeriod);
+  if (begin > 0) PlotIndexSetInteger(2, PLOT_DRAW_BEGIN, begin + SvePeriod);
 #endif
   int counted_bars = Bars;
   int i, r, limit;
@@ -188,13 +185,13 @@ double averagePrice(int i) {
 //
 //
 
-double iDeviation(double& array[], int period, int pos) {
+double iDeviation(double &array[], int period, int pos) {
   double dMA = iSma(array, period, pos);
   double dSum = 0;
   for (int i = 0; i < period; i++, pos++) dSum += (array[pos] - dMA) * (array[pos] - dMA);
   return (MathSqrt(dSum / period));
 }
-double iSma(double& array[], int period, int pos) {
+double iSma(double &array[], int period, int pos) {
   double sum = 0.0;
   for (int i = 0; i < period; i++, pos++) sum += array[pos];
   return (sum / period);
