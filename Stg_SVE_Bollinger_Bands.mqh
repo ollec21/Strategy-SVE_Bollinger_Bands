@@ -3,24 +3,10 @@
  * Implements strategy based on the SVE Bollinger Bands indicator.
  */
 
-// Includes.
-#include <EA31337-classes/Strategy.mqh>
-#include "Indi_SVE_Bollinger_Bands.mqh"
-
 // User input params.
-INPUT string __SVE_Bollinger_Bands_Parameters__ =
-    "-- SVE Bollinger Bands strategy params --";  // >>> SVE Bollinger Bands <<<
-INPUT float SVE_Bollinger_Bands_LotSize = 0;      // Lot size
-// Indicators params.
-INPUT int Indi_SVE_Bollinger_Band_TEMAPeriod = 8;           // TEMA Period
-INPUT int Indi_SVE_Bollinger_Band_SvePeriod = 18;           // SVE Period
-INPUT double Indi_SVE_Bollinger_Band_BBUpDeviations = 1.6;  // BB Up Deviation
-INPUT double Indi_SVE_Bollinger_Band_BBDnDeviations = 1.6;  // BB Down Deviation
-INPUT int Indi_SVE_Bollinger_Band_DeviationsPeriod = 63;    // Deviations Period
-INPUT int Indi_SVE_Bollinger_Band_Shift = 0;                // Indicator Shift
-// Strategy params.
+INPUT float SVE_Bollinger_Bands_LotSize = 0;               // Lot size
 INPUT int SVE_Bollinger_Bands_SignalOpenMethod = 0;        // Signal open method
-INPUT int SVE_Bollinger_Bands_SignalOpenFilterMethod = 0;  // Signal open filter method
+INPUT int SVE_Bollinger_Bands_SignalOpenFilterMethod = 1;  // Signal open filter method
 INPUT float SVE_Bollinger_Bands_SignalOpenLevel = 0;       // Signal open level
 INPUT int SVE_Bollinger_Bands_SignalOpenBoostMethod = 0;   // Signal open boost method
 INPUT int SVE_Bollinger_Bands_SignalCloseMethod = 0;       // Signal close method
@@ -31,16 +17,11 @@ INPUT int SVE_Bollinger_Bands_TickFilterMethod = 0;        // Tick filter method
 INPUT float SVE_Bollinger_Bands_MaxSpread = 2.0;           // Max spread to trade (in pips)
 INPUT int SVE_Bollinger_Bands_Shift = 0;                   // Strategy Shift (relative to the current bar, 0 - default)
 
-// Structs.
+// Includes.
+#include <EA31337-classes/Strategy.mqh>
+#include "Indi_SVE_Bollinger_Bands.mqh"
 
-// Defines struct with default user indicator values.
-struct Indi_SVE_Bollinger_Bands_Params_Defaults : Indi_SVE_Bollinger_Bands_Params {
-  Indi_SVE_Bollinger_Bands_Params_Defaults()
-      : Indi_SVE_Bollinger_Bands_Params(::Indi_SVE_Bollinger_Band_TEMAPeriod, ::Indi_SVE_Bollinger_Band_SvePeriod,
-                                        ::Indi_SVE_Bollinger_Band_BBUpDeviations,
-                                        ::Indi_SVE_Bollinger_Band_BBDnDeviations,
-                                        ::Indi_SVE_Bollinger_Band_DeviationsPeriod, ::Indi_SVE_Bollinger_Band_Shift) {}
-} indi_svebbands_defaults;
+// Structs.
 
 // Defines struct with default user strategy values.
 struct Stg_SVE_Bollinger_Bands_Params_Defaults : StgParams {
@@ -113,14 +94,29 @@ class Stg_SVE_Bollinger_Bands : public Strategy {
       // Returns false when indicator data is not valid.
       return false;
     }
+    double level = _level * Chart().GetPipSize();
     switch (_cmd) {
       case ORDER_TYPE_BUY:
-        // Buy signal.
-        _result = _indi[CURR].value[SVE_BAND_MAIN] > _indi[CURR].value[SVE_BAND_UPPER];
+        _result = _indi[CURR].value[SVE_BAND_MAIN] < _indi[CURR].value[SVE_BAND_LOWER];
+        if (_method != 0) {
+          if (METHOD(_method, 0)) _result &= fmin(Close[PREV], Close[PPREV]) < _indi[CURR].value[SVE_BAND_LOWER];
+          if (METHOD(_method, 1)) _result &= (_indi[CURR].value[SVE_BAND_LOWER] > _indi[PPREV].value[SVE_BAND_LOWER]);
+          if (METHOD(_method, 2)) _result &= (_indi[CURR].value[SVE_BAND_MAIN] > _indi[PPREV].value[SVE_BAND_MAIN]);
+          if (METHOD(_method, 3)) _result &= (_indi[CURR].value[SVE_BAND_UPPER] > _indi[PPREV].value[SVE_BAND_UPPER]);
+          if (METHOD(_method, 4)) _result &= Open[CURR] < _indi[CURR].value[SVE_BAND_MAIN];
+          if (METHOD(_method, 5)) _result &= fmin(Close[PREV], Close[PPREV]) > _indi[CURR].value[SVE_BAND_MAIN];
+        }
         break;
       case ORDER_TYPE_SELL:
-        // Sell signal.
-        _result = _indi[CURR].value[SVE_BAND_MAIN] < _indi[CURR].value[SVE_BAND_LOWER];
+        _result = _indi[CURR].value[SVE_BAND_MAIN] > _indi[CURR].value[SVE_BAND_UPPER];
+        if (_method != 0) {
+          if (METHOD(_method, 0)) _result &= fmin(Close[PREV], Close[PPREV]) > _indi[CURR].value[SVE_BAND_UPPER];
+          if (METHOD(_method, 1)) _result &= (_indi[CURR].value[SVE_BAND_LOWER] < _indi[PPREV].value[SVE_BAND_LOWER]);
+          if (METHOD(_method, 2)) _result &= (_indi[CURR].value[SVE_BAND_MAIN] < _indi[PPREV].value[SVE_BAND_MAIN]);
+          if (METHOD(_method, 3)) _result &= (_indi[CURR].value[SVE_BAND_UPPER] < _indi[PPREV].value[SVE_BAND_UPPER]);
+          if (METHOD(_method, 4)) _result &= Open[CURR] > _indi[CURR].value[SVE_BAND_MAIN];
+          if (METHOD(_method, 5)) _result &= fmin(Close[PREV], Close[PPREV]) < _indi[CURR].value[SVE_BAND_MAIN];
+        }
         break;
     }
     return _result;
@@ -130,17 +126,51 @@ class Stg_SVE_Bollinger_Bands : public Strategy {
    * Gets price limit value for profit take or stop loss.
    */
   float PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0f) {
-    // Indicator *_indi = Data();
+    Indi_SVE_Bollinger_Bands *_indi = Data();
     double _trail = _level * Market().GetPipSize();
     // int _bar_count = (int)_level * 10;
     int _direction = Order::OrderDirection(_cmd, _mode);
     double _default_value = Market().GetCloseOffer(_cmd) + _trail * _method * _direction;
     double _result = _default_value;
-    // ENUM_APPLIED_PRICE _ap = _direction > 0 ? PRICE_HIGH : PRICE_LOW;
     switch (_method) {
       case 1:
-        // Trailing stop here.
+        _result = (_direction > 0 ? _indi[CURR].value[SVE_BAND_UPPER] : _indi[CURR].value[SVE_BAND_LOWER]) +
+                  _trail * _direction;
         break;
+      case 2:
+        _result = (_direction > 0 ? _indi[PREV].value[SVE_BAND_UPPER] : _indi[PREV].value[SVE_BAND_LOWER]) +
+                  _trail * _direction;
+        break;
+      case 3:
+        _result = (_direction > 0 ? _indi[PPREV].value[SVE_BAND_UPPER] : _indi[PPREV].value[SVE_BAND_LOWER]) +
+                  _trail * _direction;
+        break;
+      case 4:
+        _result = (_direction > 0 ? fmax(_indi[PREV].value[SVE_BAND_UPPER], _indi[PPREV].value[SVE_BAND_UPPER])
+                                  : fmin(_indi[PREV].value[SVE_BAND_LOWER], _indi[PPREV].value[SVE_BAND_LOWER])) +
+                  _trail * _direction;
+        break;
+      case 5:
+        _result = _indi[CURR].value[SVE_BAND_MAIN] + _trail * _direction;
+        break;
+      case 6:
+        _result = _indi[PREV].value[SVE_BAND_MAIN] + _trail * _direction;
+        break;
+      case 7:
+        _result = _indi[PPREV].value[SVE_BAND_MAIN] + _trail * _direction;
+        break;
+      case 8: {
+        int _bar_count8 = (int) round(_level * _indi.params.GetSvePeriod());
+        _result = _direction > 0 ? _indi.GetPrice(PRICE_HIGH, _indi.GetHighest(_bar_count8))
+                                 : _indi.GetPrice(PRICE_LOW, _indi.GetLowest(_bar_count8));
+        break;
+      }
+      case 9: {
+        int _bar_count9 = (int) round(_level * _indi.params.GetTEMAPeriod());
+        _result = _direction > 0 ? _indi.GetPrice(PRICE_HIGH, _indi.GetHighest(_bar_count9))
+                                 : _indi.GetPrice(PRICE_LOW, _indi.GetLowest(_bar_count9));
+        break;
+      }
     }
     return (float)_result;
   }
