@@ -60,7 +60,7 @@ struct Stg_SVE_Bollinger_Bands_Params {
 
   // Struct constructors.
   Stg_SVE_Bollinger_Bands_Params(Indi_SVE_Bollinger_Bands_Params &_iparams, StgParams &_sparams)
-      : iparams(indi_svebbands_defaults), sparams(stg_svebbands_defaults) {
+      : iparams(indi_svebbands_defaults, _iparams.tf), sparams(stg_svebbands_defaults) {
     iparams = _iparams;
     sparams = _sparams;
   }
@@ -81,7 +81,7 @@ class Stg_SVE_Bollinger_Bands : public Strategy {
   static Stg_SVE_Bollinger_Bands *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL,
                                        ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
-    Indi_SVE_Bollinger_Bands_Params _indi_params(indi_svebbands_defaults);
+    Indi_SVE_Bollinger_Bands_Params _indi_params(indi_svebbands_defaults, _tf);
     StgParams _stg_params(stg_svebbands_defaults);
     if (!Terminal::IsOptimization()) {
       SetParamsByTf<Indi_SVE_Bollinger_Bands_Params>(_indi_params, _tf, indi_svebbands_m1, indi_svebbands_m5,

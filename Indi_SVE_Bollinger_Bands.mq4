@@ -57,11 +57,11 @@ int init() {
   SetIndexBuffer(0, bbValue);
   SetIndexBuffer(1, bbUpper);
   SetIndexBuffer(2, bbLower);
-  SetIndexBuffer(3, tmaZima);
-  SetIndexBuffer(4, svePerB);
+  SetIndexBuffer(3, tmaZima, INDICATOR_CALCULATIONS);
+  SetIndexBuffer(4, svePerB, INDICATOR_CALCULATIONS);
   alpha = 2.0 / (1.0 + TEMAPeriod);
-  IndicatorShortName("SVE bollinger band (" + TEMAPeriod + "," + SvePeriod + "," + DoubleToStr(BBUpDeviations, 2) +
-                     "," + DoubleToStr(BBDnDeviations, 2) + ")");
+  IndicatorShortName("SVE bollinger band (" + (string)TEMAPeriod + "," + (string)SvePeriod + "," +
+                     DoubleToStr(BBUpDeviations, 2) + "," + DoubleToStr(BBDnDeviations, 2) + ")");
   return (0);
 }
 int deinit() { return (0); }
@@ -174,12 +174,12 @@ double averagePrice(int i) {
 double iDeviation(double& array[], int period, int pos) {
   double dMA = iSma(array, period, pos);
   double dSum = 0;
-  for (int i = 0; i < period; i++, pos++) dSum += (array[pos] - dMA) * (array[pos] - dMA);
+  for (int i = 0; i < period && pos < ArrayRange(array, 0); i++, pos++) dSum += (array[pos] - dMA) * (array[pos] - dMA);
   return (MathSqrt(dSum / period));
 }
 double iSma(double& array[], int period, int pos) {
   double sum = 0.0;
-  for (int i = 0; i < period; i++, pos++) sum += array[pos];
+  for (int i = 0; i < period && pos < ArrayRange(array, 0); i++, pos++) sum += array[pos];
   return (sum / period);
 }
 

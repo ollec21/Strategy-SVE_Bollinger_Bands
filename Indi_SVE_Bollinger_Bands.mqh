@@ -51,7 +51,10 @@ struct Indi_SVE_Bollinger_Bands_Params : IndicatorParams {
     SetDataSourceType(IDATA_ICUSTOM);
     SetDataValueType(TYPE_DOUBLE);
   };
-  void Indi_SVE_Bollinger_Bands_Params(Indi_SVE_Bollinger_Bands_Params &_params) { this = _params; }
+  void Indi_SVE_Bollinger_Bands_Params(Indi_SVE_Bollinger_Bands_Params &_params, ENUM_TIMEFRAMES _tf) {
+    this = _params;
+    _params.tf = _tf;
+  }
   // Getters.
   int GetTEMAPeriod() { return TEMAPeriod; }
   int GetSvePeriod() { return SvePeriod; }
