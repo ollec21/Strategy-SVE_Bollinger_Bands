@@ -31,6 +31,13 @@ jobs:
           include: .
           mt-version: 5.0.0.2361
           verbose: true
+      - name: Compile indicator (MQL5)
+        uses: fx31337/mql-compile-action@master
+        with:
+          path: Indi_SVE_Bollinger_Bands.mq5
+          include: .
+          mt-version: 5.0.0.2515
+          verbose: true
       - name: Compile strategy (MQL4)
         uses: fx31337/mql-compile-action@master
         with:
