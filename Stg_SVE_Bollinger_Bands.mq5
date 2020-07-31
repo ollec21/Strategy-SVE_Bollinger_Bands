@@ -6,10 +6,12 @@
 // Includes EA31337 framework.
 #include <EA31337-classes/EA.mqh>
 
-// Inputs.
-input int Active_Tfs = 64;                // Activated timeframes (1-255) [M1=1,M5=2,M15=4,M30=8,H1=16,H4=32...]
-input ENUM_LOG_LEVEL Log_Level = V_INFO;  // Log level.
-input bool Info_On_Chart = true;          // Display info on chart.
+// User input params.
+INPUT string __SVE_Bollinger_Bands_Strategy_Params__ =
+    "-- SVE Bollinger Bands strategy params --";  // >>> SVE Bollinger Bands strategy <<<
+input int Active_Tfs = 64;                        // Activated timeframes (1-255) [M1=1,M5=2,M15=4,M30=8,H1=16,H4=32...]
+input ENUM_LOG_LEVEL Log_Level = V_INFO;          // Log level.
+input bool Info_On_Chart = true;                  // Display info on chart.
 
 // Includes main strategy class.
 #include "Stg_SVE_Bollinger_Bands.mqh"

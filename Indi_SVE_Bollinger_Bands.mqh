@@ -19,6 +19,16 @@
  *
  */
 
+// User input params.
+INPUT string __SVE_Bollinger_Bands_Indi_Params__ =
+    "-- SVE Bollinger Bands indicator params --";           // >>> SVE Bollinger Bands indicator <<<
+INPUT int Indi_SVE_Bollinger_Band_TEMAPeriod = 8;           // TEMA Period
+INPUT int Indi_SVE_Bollinger_Band_SvePeriod = 18;           // SVE Period
+INPUT double Indi_SVE_Bollinger_Band_BBUpDeviations = 1.6;  // BB Up Deviation
+INPUT double Indi_SVE_Bollinger_Band_BBDnDeviations = 1.6;  // BB Down Deviation
+INPUT int Indi_SVE_Bollinger_Band_DeviationsPeriod = 63;    // Deviations Period
+INPUT int Indi_SVE_Bollinger_Band_Shift = 0;                // Indicator Shift
+
 // Includes.
 #include <EA31337-classes/Indicator.mqh>
 
@@ -31,7 +41,9 @@ enum ENUM_SVE_BAND_LINE {
 };
 
 // Structs.
-struct Indi_SVE_Bollinger_Bands_Params : IndicatorParams {
+
+// Defines struct to store indicator parameter values.
+struct Indi_SVE_Bollinger_Bands_Params : public IndicatorParams {
   // Indicator params.
   int TEMAPeriod;
   int SvePeriod;
@@ -69,15 +81,23 @@ struct Indi_SVE_Bollinger_Bands_Params : IndicatorParams {
   void SetDeviationsPeriod(int _value) { DeviationsPeriod = _value; }
 };
 
+// Defines struct with default user indicator values.
+struct Indi_SVE_Bollinger_Bands_Params_Defaults : Indi_SVE_Bollinger_Bands_Params {
+  Indi_SVE_Bollinger_Bands_Params_Defaults()
+      : Indi_SVE_Bollinger_Bands_Params(::Indi_SVE_Bollinger_Band_TEMAPeriod, ::Indi_SVE_Bollinger_Band_SvePeriod,
+                                        ::Indi_SVE_Bollinger_Band_BBUpDeviations,
+                                        ::Indi_SVE_Bollinger_Band_BBDnDeviations,
+                                        ::Indi_SVE_Bollinger_Band_DeviationsPeriod, ::Indi_SVE_Bollinger_Band_Shift) {}
+} indi_svebbands_defaults;
+
 /**
  * Implements indicator class.
  */
 class Indi_SVE_Bollinger_Bands : public Indicator {
- protected:
+ public:
   // Structs.
   Indi_SVE_Bollinger_Bands_Params params;
 
- public:
   /**
    * Class constructor.
    */
@@ -91,6 +111,11 @@ class Indi_SVE_Bollinger_Bands : public Indicator {
         Indicator(NULL, _tf) {
     params = _p;
   }
+
+  /**
+   * Gets indicator's params.
+   */
+  // Indi_SVE_Bollinger_Bands_Params GetIndiParams() const { return params; }
 
   /**
    * Returns the indicator's value.
