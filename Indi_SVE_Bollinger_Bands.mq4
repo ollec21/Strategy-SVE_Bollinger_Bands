@@ -52,7 +52,12 @@ double alpha;
 //
 //
 
+double test_values[] = {1.245, 1.248, 1.254, 1.264, 1.268, 1.261, 1.256, 1.250, 1.242, 1.240, 1.235,
+                        1.240, 1.234, 1.245, 1.265, 1.274, 1.285, 1.295, 1.300, 1.312, 1.315, 1.320,
+                        1.325, 1.335, 1.342, 1.348, 1.352, 1.357, 1.359, 1.422, 1.430, 1.435};
+
 int init() {
+
   IndicatorBuffers(5);
   SetIndexBuffer(0, bbValue);
   SetIndexBuffer(1, bbUpper);
@@ -87,6 +92,8 @@ int start() {
   int counted_bars = IndicatorCounted();
   int i, r, limit;
 
+  Print(counted_bars, " counted, ", ArraySize(tmaZima), " prices, price 0: ", ArraySize(tmaZima) > 0 ? DoubleToString(tmaZima[0]) : "NULL", ", ", "price last: ", ArraySize(tmaZima) > 0 ? DoubleToString(tmaZima[ArraySize(tmaZima) - 1]) : "NULL");
+
   if (counted_bars < 0) return (-1);
   if (counted_bars > 0) counted_bars--;
   limit = MathMin(Bars - counted_bars, Bars - 1);
@@ -97,6 +104,7 @@ int start() {
   //
   //
   //
+
 
   for (i = limit, r = Bars - i - 1; i >= 0; i--, r++) {
     if (i == (Bars - 1)) {
@@ -126,11 +134,13 @@ int start() {
   //
   //
   //
+  
+
 
   for (i = limit; i >= 0; i--) {
     double sdev = iDeviation(tmaZima, SvePeriod, i);
     if (sdev != 0)
-      svePerB[i] = 25.0 * (tmaZima[i] + 2.0 * sdev - iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_LWMA, i)) / sdev;
+      svePerB[i] = 25.0 * (tmaZima[i] + 2.0 * sdev - Indi_MA::iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_LWMA, i, "Cache")) / sdev;
     else
       svePerB[i] = 0;
     sdev = iDeviation(svePerB, DeviationsPeriod, i);
