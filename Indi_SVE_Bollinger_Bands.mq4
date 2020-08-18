@@ -8,6 +8,7 @@
 #property link "mladenfx@gmail.com"
 
 #property indicator_separate_window
+#property indicator_chart_window 1
 #property indicator_buffers 3
 #property indicator_color1 DeepSkyBlue
 #property indicator_color2 LimeGreen
@@ -52,6 +53,8 @@ double alpha;
 //
 //
 
+#include <EA31337-classes/Indicators/Indi_MA.mqh>
+
 double test_values[] = {1.245, 1.248, 1.254, 1.264, 1.268, 1.261, 1.256, 1.250, 1.242, 1.240, 1.235,
                         1.240, 1.234, 1.245, 1.265, 1.274, 1.285, 1.295, 1.300, 1.312, 1.315, 1.320,
                         1.325, 1.335, 1.342, 1.348, 1.352, 1.357, 1.359, 1.422, 1.430, 1.435};
@@ -67,6 +70,13 @@ int init() {
   alpha = 2.0 / (1.0 + TEMAPeriod);
   IndicatorShortName("SVE bollinger band (" + (string)TEMAPeriod + "," + (string)SvePeriod + "," +
                      DoubleToStr(BBUpDeviations, 2) + "," + DoubleToStr(BBDnDeviations, 2) + ")");
+
+  ArraySetAsSeries(bbValue, true);
+  ArraySetAsSeries(bbUpper, true);
+  ArraySetAsSeries(bbLower, true);
+
+  ArraySetAsSeries(tmaZima, true);
+
   return (0);
 }
 int deinit() { return (0); }
@@ -92,12 +102,10 @@ int start() {
   int counted_bars = IndicatorCounted();
   int i, r, limit;
 
-  Print(counted_bars, " counted, ", ArraySize(tmaZima), " prices, price 0: ", ArraySize(tmaZima) > 0 ? DoubleToString(tmaZima[0]) : "NULL", ", ", "price last: ", ArraySize(tmaZima) > 0 ? DoubleToString(tmaZima[ArraySize(tmaZima) - 1]) : "NULL");
-
   if (counted_bars < 0) return (-1);
   if (counted_bars > 0) counted_bars--;
   limit = MathMin(Bars - counted_bars, Bars - 1);
-  if (ArrayRange(tBuffer, 0) != Bars) ArrayResize(tBuffer, Bars);
+  if (ArrayRange(tBuffer, 0) != Bars) ArrayResize(tBuffer, Bars, Bars - Bars % 4096 + 4096);
 
   //
   //
@@ -139,17 +147,27 @@ int start() {
 
   for (i = limit; i >= 0; i--) {
     double sdev = iDeviation(tmaZima, SvePeriod, i);
-    if (sdev != 0)
-      svePerB[i] = 25.0 * (tmaZima[i] + 2.0 * sdev - Indi_MA::iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_LWMA, i, "Cache")) / sdev;
+    if (sdev != 0) {
+      static double arr[];
+      //if (ArraySize(arr) < ArraySize(tmaZima))
+      //  ArrayResize(arr, ArraySize(tmaZima), ArraySize(tmaZima) - ArraySize(tmaZima) % 4096 + 4096);
+      //ArraySetAsSeries(arr, true);
+      //ArrayCopy(arr, tmaZima);
+      double ima = Indi_MA::iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_SMA, i, "");      
+      
+      //double ima = Indi_MA::iMAOnArray(arr, 0, SvePeriod, 0, MODE_SMA, i, "a");
+      
+      svePerB[i] = 25.0 * (tmaZima[i] + 2.0 * sdev - ima) / sdev;
+    }
     else
       svePerB[i] = 0;
+      
     sdev = iDeviation(svePerB, DeviationsPeriod, i);
 
     bbValue[i] = svePerB[i];
     bbUpper[i] = 50.0 + sdev * BBUpDeviations;
     bbLower[i] = 50.0 - sdev * BBDnDeviations;
   }
-
   //
   //
   //
