@@ -55,10 +55,6 @@ double alpha;
 
 #include <EA31337-classes/Indicators/Indi_MA.mqh>
 
-double test_values[] = {1.245, 1.248, 1.254, 1.264, 1.268, 1.261, 1.256, 1.250, 1.242, 1.240, 1.235,
-                        1.240, 1.234, 1.245, 1.265, 1.274, 1.285, 1.295, 1.300, 1.312, 1.315, 1.320,
-                        1.325, 1.335, 1.342, 1.348, 1.352, 1.357, 1.359, 1.422, 1.430, 1.435};
-
 int init() {
 
   IndicatorBuffers(5);
@@ -147,18 +143,8 @@ int start() {
 
   for (i = limit; i >= 0; i--) {
     double sdev = iDeviation(tmaZima, SvePeriod, i);
-    if (sdev != 0) {
-      static double arr[];
-      //if (ArraySize(arr) < ArraySize(tmaZima))
-      //  ArrayResize(arr, ArraySize(tmaZima), ArraySize(tmaZima) - ArraySize(tmaZima) % 4096 + 4096);
-      //ArraySetAsSeries(arr, true);
-      //ArrayCopy(arr, tmaZima);
-      double ima = Indi_MA::iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_SMA, i, "");      
-      
-      //double ima = Indi_MA::iMAOnArray(arr, 0, SvePeriod, 0, MODE_SMA, i, "a");
-      
-      svePerB[i] = 25.0 * (tmaZima[i] + 2.0 * sdev - ima) / sdev;
-    }
+    if (sdev != 0)
+      svePerB[i] = 25.0 * (tmaZima[i] + 2.0 * sdev - Indi_MA::iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_LWMA, i, "SVE_BB_iMACache_1")) / sdev;
     else
       svePerB[i] = 0;
       
