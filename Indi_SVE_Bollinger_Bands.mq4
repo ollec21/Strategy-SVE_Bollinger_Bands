@@ -8,6 +8,7 @@
 #property link "mladenfx@gmail.com"
 
 #property indicator_separate_window
+#property indicator_chart_window 1
 #property indicator_buffers 3
 #property indicator_color1 DeepSkyBlue
 #property indicator_color2 LimeGreen
@@ -52,7 +53,10 @@ double alpha;
 //
 //
 
+#include <EA31337-classes/Indicators/Indi_MA.mqh>
+
 int init() {
+
   IndicatorBuffers(5);
   SetIndexBuffer(0, bbValue);
   SetIndexBuffer(1, bbUpper);
@@ -62,6 +66,13 @@ int init() {
   alpha = 2.0 / (1.0 + TEMAPeriod);
   IndicatorShortName("SVE bollinger band (" + (string)TEMAPeriod + "," + (string)SvePeriod + "," +
                      DoubleToStr(BBUpDeviations, 2) + "," + DoubleToStr(BBDnDeviations, 2) + ")");
+
+  ArraySetAsSeries(bbValue, true);
+  ArraySetAsSeries(bbUpper, true);
+  ArraySetAsSeries(bbLower, true);
+
+  ArraySetAsSeries(tmaZima, true);
+
   return (0);
 }
 int deinit() { return (0); }
@@ -90,13 +101,14 @@ int start() {
   if (counted_bars < 0) return (-1);
   if (counted_bars > 0) counted_bars--;
   limit = MathMin(Bars - counted_bars, Bars - 1);
-  if (ArrayRange(tBuffer, 0) != Bars) ArrayResize(tBuffer, Bars);
+  if (ArrayRange(tBuffer, 0) != Bars) ArrayResize(tBuffer, Bars, Bars - Bars % 4096 + 4096);
 
   //
   //
   //
   //
   //
+
 
   for (i = limit, r = Bars - i - 1; i >= 0; i--, r++) {
     if (i == (Bars - 1)) {
@@ -126,20 +138,22 @@ int start() {
   //
   //
   //
+  
+
 
   for (i = limit; i >= 0; i--) {
     double sdev = iDeviation(tmaZima, SvePeriod, i);
     if (sdev != 0)
-      svePerB[i] = 25.0 * (tmaZima[i] + 2.0 * sdev - iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_LWMA, i)) / sdev;
+      svePerB[i] = 25.0 * (tmaZima[i] + 2.0 * sdev - Indi_MA::iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_LWMA, i, "SVE_BB_iMACache_1")) / sdev;
     else
       svePerB[i] = 0;
+      
     sdev = iDeviation(svePerB, DeviationsPeriod, i);
 
     bbValue[i] = svePerB[i];
     bbUpper[i] = 50.0 + sdev * BBUpDeviations;
     bbLower[i] = 50.0 - sdev * BBDnDeviations;
   }
-
   //
   //
   //
