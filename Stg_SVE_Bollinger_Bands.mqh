@@ -19,6 +19,7 @@ INPUT int SVE_Bollinger_Bands_Shift = 0;                   // Strategy Shift (re
 
 // Includes.
 #include <EA31337-classes/Strategy.mqh>
+
 #include "Indi_SVE_Bollinger_Bands.mqh"
 
 // Structs.
@@ -160,13 +161,13 @@ class Stg_SVE_Bollinger_Bands : public Strategy {
         _result = _indi[PPREV].value[SVE_BAND_MAIN] + _trail * _direction;
         break;
       case 8: {
-        int _bar_count8 = (int) round(_level * _indi.params.GetSvePeriod());
+        int _bar_count8 = (int)round(_level * _indi.params.GetSvePeriod());
         _result = _direction > 0 ? _indi.GetPrice(PRICE_HIGH, _indi.GetHighest(_bar_count8))
                                  : _indi.GetPrice(PRICE_LOW, _indi.GetLowest(_bar_count8));
         break;
       }
       case 9: {
-        int _bar_count9 = (int) round(_level * _indi.params.GetTEMAPeriod());
+        int _bar_count9 = (int)round(_level * _indi.params.GetTEMAPeriod());
         _result = _direction > 0 ? _indi.GetPrice(PRICE_HIGH, _indi.GetHighest(_bar_count9))
                                  : _indi.GetPrice(PRICE_LOW, _indi.GetLowest(_bar_count9));
         break;

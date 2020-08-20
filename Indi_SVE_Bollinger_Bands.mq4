@@ -8,7 +8,6 @@
 #property link "mladenfx@gmail.com"
 
 #property indicator_separate_window
-#property indicator_chart_window 1
 #property indicator_buffers 3
 #property indicator_color1 DeepSkyBlue
 #property indicator_color2 LimeGreen
@@ -56,7 +55,6 @@ double alpha;
 #include <EA31337-classes/Indicators/Indi_MA.mqh>
 
 int init() {
-
   IndicatorBuffers(5);
   SetIndexBuffer(0, bbValue);
   SetIndexBuffer(1, bbUpper);
@@ -109,7 +107,6 @@ int start() {
   //
   //
 
-
   for (i = limit, r = Bars - i - 1; i >= 0; i--, r++) {
     if (i == (Bars - 1)) {
       tBuffer[r][__haOpen] = averagePrice(i);
@@ -138,16 +135,17 @@ int start() {
   //
   //
   //
-  
-
 
   for (i = limit; i >= 0; i--) {
     double sdev = iDeviation(tmaZima, SvePeriod, i);
     if (sdev != 0)
-      svePerB[i] = 25.0 * (tmaZima[i] + 2.0 * sdev - Indi_MA::iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_LWMA, i, "SVE_BB_iMACache_1")) / sdev;
+      svePerB[i] =
+          25.0 *
+          (tmaZima[i] + 2.0 * sdev - Indi_MA::iMAOnArray(tmaZima, 0, SvePeriod, 0, MODE_LWMA, i, "SVE_BB_iMACache_1")) /
+          sdev;
     else
       svePerB[i] = 0;
-      
+
     sdev = iDeviation(svePerB, DeviationsPeriod, i);
 
     bbValue[i] = svePerB[i];
