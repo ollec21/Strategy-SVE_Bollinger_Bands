@@ -70,6 +70,7 @@ int init() {
   ArraySetAsSeries(bbLower, true);
 
   ArraySetAsSeries(tmaZima, true);
+  ArraySetAsSeries(svePerB, true);
 
   return (0);
 }
