@@ -11,8 +11,8 @@ INPUT float SVE_Bollinger_Bands_SignalOpenLevel = 0;       // Signal open level
 INPUT int SVE_Bollinger_Bands_SignalOpenBoostMethod = 0;   // Signal open boost method
 INPUT int SVE_Bollinger_Bands_SignalCloseMethod = 0;       // Signal close method
 INPUT float SVE_Bollinger_Bands_SignalCloseLevel = 0;      // Signal close level
-INPUT int SVE_Bollinger_Bands_PriceLimitMethod = 0;        // Price limit method
-INPUT float SVE_Bollinger_Bands_PriceLimitLevel = 2;       // Price limit level
+INPUT int SVE_Bollinger_Bands_PriceStopMethod = 0;         // Price stop method
+INPUT float SVE_Bollinger_Bands_PriceStopLevel = 2;        // Price stop level
 INPUT int SVE_Bollinger_Bands_TickFilterMethod = 0;        // Tick filter method
 INPUT float SVE_Bollinger_Bands_MaxSpread = 2.0;           // Max spread to trade (in pips)
 INPUT int SVE_Bollinger_Bands_Shift = 0;                   // Strategy Shift (relative to the current bar, 0 - default)
@@ -30,7 +30,7 @@ struct Stg_SVE_Bollinger_Bands_Params_Defaults : StgParams {
       : StgParams(::SVE_Bollinger_Bands_SignalOpenMethod, ::SVE_Bollinger_Bands_SignalOpenFilterMethod,
                   ::SVE_Bollinger_Bands_SignalOpenLevel, ::SVE_Bollinger_Bands_SignalOpenBoostMethod,
                   ::SVE_Bollinger_Bands_SignalCloseMethod, ::SVE_Bollinger_Bands_SignalCloseLevel,
-                  ::SVE_Bollinger_Bands_PriceLimitMethod, ::SVE_Bollinger_Bands_PriceLimitLevel,
+                  ::SVE_Bollinger_Bands_PriceStopMethod, ::SVE_Bollinger_Bands_PriceStopLevel,
                   ::SVE_Bollinger_Bands_TickFilterMethod, ::SVE_Bollinger_Bands_MaxSpread,
                   ::SVE_Bollinger_Bands_Shift) {}
 } stg_svebbands_defaults;
@@ -124,9 +124,9 @@ class Stg_SVE_Bollinger_Bands : public Strategy {
   }
 
   /**
-   * Gets price limit value for profit take or stop loss.
+   * Gets price stop value for profit take or stop loss.
    */
-  float PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0f) {
+  float PriceStop(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0f) {
     Indi_SVE_Bollinger_Bands *_indi = Data();
     double _trail = _level * Market().GetPipSize();
     // int _bar_count = (int)_level * 10;
