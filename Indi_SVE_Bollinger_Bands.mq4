@@ -41,7 +41,7 @@ double bbLower[];
 double tmaZima[];
 double svePerB[];
 double tBuffer[][10];
-double alpha;
+double ialpha;
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -61,7 +61,7 @@ int init() {
   SetIndexBuffer(2, bbLower);
   SetIndexBuffer(3, tmaZima, INDICATOR_CALCULATIONS);
   SetIndexBuffer(4, svePerB, INDICATOR_CALCULATIONS);
-  alpha = 2.0 / (1.0 + TEMAPeriod);
+  ialpha = 2.0 / (1.0 + TEMAPeriod);
   IndicatorShortName("SVE bollinger band (" + (string)TEMAPeriod + "," + (string)SvePeriod + "," +
                      DoubleToStr(BBUpDeviations, 2) + "," + DoubleToStr(BBDnDeviations, 2) + ")");
 
@@ -213,9 +213,9 @@ double iTema(double price, int pos, int sbuf = 0) {
     tBuffer[i][ib] = price;
     tBuffer[i][ic] = price;
   } else {
-    tBuffer[i][ia] = tBuffer[i - 1][ia] + alpha * (price - tBuffer[i - 1][ia]);
-    tBuffer[i][ib] = tBuffer[i - 1][ib] + alpha * (tBuffer[i][ia] - tBuffer[i - 1][ib]);
-    tBuffer[i][ic] = tBuffer[i - 1][ic] + alpha * (tBuffer[i][ib] - tBuffer[i - 1][ic]);
+    tBuffer[i][ia] = tBuffer[i - 1][ia] + ialpha * (price - tBuffer[i - 1][ia]);
+    tBuffer[i][ib] = tBuffer[i - 1][ib] + ialpha * (tBuffer[i][ia] - tBuffer[i - 1][ib]);
+    tBuffer[i][ic] = tBuffer[i - 1][ic] + ialpha * (tBuffer[i][ib] - tBuffer[i - 1][ic]);
   }
   return (3 * tBuffer[i][ia] - 3 * tBuffer[i][ib] + tBuffer[i][ic]);
 }
