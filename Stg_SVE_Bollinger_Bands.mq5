@@ -5,6 +5,8 @@
 
 // Includes EA31337 framework.
 #include <EA31337-classes/EA.mqh>
+#include <EA31337-classes/Indicator.mqh>
+#include <EA31337-classes/Strategy.mqh>
 
 // User input params.
 INPUT string __SVE_Bollinger_Bands_Strategy_Params__ =

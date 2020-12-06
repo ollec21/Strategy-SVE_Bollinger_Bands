@@ -18,8 +18,6 @@ INPUT float SVE_Bollinger_Bands_MaxSpread = 2.0;           // Max spread to trad
 INPUT int SVE_Bollinger_Bands_Shift = 0;                   // Strategy Shift (relative to the current bar, 0 - default)
 
 // Includes.
-#include <EA31337-classes/Strategy.mqh>
-
 #include "Indi_SVE_Bollinger_Bands.mqh"
 
 // Structs.

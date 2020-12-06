@@ -29,9 +29,6 @@ INPUT double Indi_SVE_Bollinger_Band_BBDnDeviations = 1.6;  // BB Down Deviation
 INPUT int Indi_SVE_Bollinger_Band_DeviationsPeriod = 63;    // Deviations Period
 INPUT int Indi_SVE_Bollinger_Band_Shift = 0;                // Indicator Shift
 
-// Includes.
-#include <EA31337-classes/Indicator.mqh>
-
 // Indicator line identifiers used in the indicator.
 enum ENUM_SVE_BAND_LINE {
   SVE_BAND_MAIN = 0,   // Main line.
