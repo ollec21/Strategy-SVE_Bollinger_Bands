@@ -96,25 +96,25 @@ class Stg_SVE_Bollinger_Bands : public Strategy {
     double level = _level * Chart().GetPipSize();
     switch (_cmd) {
       case ORDER_TYPE_BUY:
-        _result = _indi[CURR][SVE_BAND_MAIN] < _indi[CURR][SVE_BAND_LOWER];
+        _result = _indi[CURR][(int)SVE_BAND_MAIN] < _indi[CURR][(int)SVE_BAND_LOWER];
         if (_method != 0) {
-          if (METHOD(_method, 0)) _result &= fmin(Close[PREV], Close[PPREV]) < _indi[CURR][SVE_BAND_LOWER];
-          if (METHOD(_method, 1)) _result &= (_indi[CURR][SVE_BAND_LOWER] > _indi[PPREV][SVE_BAND_LOWER]);
-          if (METHOD(_method, 2)) _result &= (_indi[CURR][SVE_BAND_MAIN] > _indi[PPREV][SVE_BAND_MAIN]);
-          if (METHOD(_method, 3)) _result &= (_indi[CURR][SVE_BAND_UPPER] > _indi[PPREV][SVE_BAND_UPPER]);
-          if (METHOD(_method, 4)) _result &= Open[CURR] < _indi[CURR][SVE_BAND_MAIN];
-          if (METHOD(_method, 5)) _result &= fmin(Close[PREV], Close[PPREV]) > _indi[CURR][SVE_BAND_MAIN];
+          if (METHOD(_method, 0)) _result &= fmin(Close[PREV], Close[PPREV]) < _indi[CURR][(int)SVE_BAND_LOWER];
+          if (METHOD(_method, 1)) _result &= (_indi[CURR][(int)SVE_BAND_LOWER] > _indi[PPREV][(int)SVE_BAND_LOWER]);
+          if (METHOD(_method, 2)) _result &= (_indi[CURR][(int)SVE_BAND_MAIN] > _indi[PPREV][(int)SVE_BAND_MAIN]);
+          if (METHOD(_method, 3)) _result &= (_indi[CURR][(int)SVE_BAND_UPPER] > _indi[PPREV][(int)SVE_BAND_UPPER]);
+          if (METHOD(_method, 4)) _result &= Open[CURR] < _indi[CURR][(int)SVE_BAND_MAIN];
+          if (METHOD(_method, 5)) _result &= fmin(Close[PREV], Close[PPREV]) > _indi[CURR][(int)SVE_BAND_MAIN];
         }
         break;
       case ORDER_TYPE_SELL:
-        _result = _indi[CURR][SVE_BAND_MAIN] > _indi[CURR][SVE_BAND_UPPER];
+        _result = _indi[CURR][(int)SVE_BAND_MAIN] > _indi[CURR][(int)SVE_BAND_UPPER];
         if (_method != 0) {
-          if (METHOD(_method, 0)) _result &= fmin(Close[PREV], Close[PPREV]) > _indi[CURR][SVE_BAND_UPPER];
-          if (METHOD(_method, 1)) _result &= (_indi[CURR][SVE_BAND_LOWER] < _indi[PPREV][SVE_BAND_LOWER]);
-          if (METHOD(_method, 2)) _result &= (_indi[CURR][SVE_BAND_MAIN] < _indi[PPREV][SVE_BAND_MAIN]);
-          if (METHOD(_method, 3)) _result &= (_indi[CURR][SVE_BAND_UPPER] < _indi[PPREV][SVE_BAND_UPPER]);
-          if (METHOD(_method, 4)) _result &= Open[CURR] > _indi[CURR][SVE_BAND_MAIN];
-          if (METHOD(_method, 5)) _result &= fmin(Close[PREV], Close[PPREV]) < _indi[CURR][SVE_BAND_MAIN];
+          if (METHOD(_method, 0)) _result &= fmin(Close[PREV], Close[PPREV]) > _indi[CURR][(int)SVE_BAND_UPPER];
+          if (METHOD(_method, 1)) _result &= (_indi[CURR][(int)SVE_BAND_LOWER] < _indi[PPREV][(int)SVE_BAND_LOWER]);
+          if (METHOD(_method, 2)) _result &= (_indi[CURR][(int)SVE_BAND_MAIN] < _indi[PPREV][(int)SVE_BAND_MAIN]);
+          if (METHOD(_method, 3)) _result &= (_indi[CURR][(int)SVE_BAND_UPPER] < _indi[PPREV][(int)SVE_BAND_UPPER]);
+          if (METHOD(_method, 4)) _result &= Open[CURR] > _indi[CURR][(int)SVE_BAND_MAIN];
+          if (METHOD(_method, 5)) _result &= fmin(Close[PREV], Close[PPREV]) < _indi[CURR][(int)SVE_BAND_MAIN];
         }
         break;
     }
@@ -133,27 +133,30 @@ class Stg_SVE_Bollinger_Bands : public Strategy {
     double _result = _default_value;
     switch (_method) {
       case 1:
-        _result = (_direction > 0 ? _indi[CURR][SVE_BAND_UPPER] : _indi[CURR][SVE_BAND_LOWER]) + _trail * _direction;
+        _result = (_direction > 0 ? _indi[CURR][(int)SVE_BAND_UPPER] : _indi[CURR][(int)SVE_BAND_LOWER]) +
+                  _trail * _direction;
         break;
       case 2:
-        _result = (_direction > 0 ? _indi[PREV][SVE_BAND_UPPER] : _indi[PREV][SVE_BAND_LOWER]) + _trail * _direction;
+        _result = (_direction > 0 ? _indi[PREV][(int)SVE_BAND_UPPER] : _indi[PREV][(int)SVE_BAND_LOWER]) +
+                  _trail * _direction;
         break;
       case 3:
-        _result = (_direction > 0 ? _indi[PPREV][SVE_BAND_UPPER] : _indi[PPREV][SVE_BAND_LOWER]) + _trail * _direction;
+        _result = (_direction > 0 ? _indi[PPREV][(int)SVE_BAND_UPPER] : _indi[PPREV][(int)SVE_BAND_LOWER]) +
+                  _trail * _direction;
         break;
       case 4:
-        _result = (_direction > 0 ? fmax(_indi[PREV][SVE_BAND_UPPER], _indi[PPREV][SVE_BAND_UPPER])
-                                  : fmin(_indi[PREV][SVE_BAND_LOWER], _indi[PPREV][SVE_BAND_LOWER])) +
+        _result = (_direction > 0 ? fmax(_indi[PREV][(int)SVE_BAND_UPPER], _indi[PPREV][(int)SVE_BAND_UPPER])
+                                  : fmin(_indi[PREV][(int)SVE_BAND_LOWER], _indi[PPREV][(int)SVE_BAND_LOWER])) +
                   _trail * _direction;
         break;
       case 5:
-        _result = _indi[CURR][SVE_BAND_MAIN] + _trail * _direction;
+        _result = _indi[CURR][(int)SVE_BAND_MAIN] + _trail * _direction;
         break;
       case 6:
-        _result = _indi[PREV][SVE_BAND_MAIN] + _trail * _direction;
+        _result = _indi[PREV][(int)SVE_BAND_MAIN] + _trail * _direction;
         break;
       case 7:
-        _result = _indi[PPREV][SVE_BAND_MAIN] + _trail * _direction;
+        _result = _indi[PPREV][(int)SVE_BAND_MAIN] + _trail * _direction;
         break;
       case 8: {
         int _bar_count8 = (int)round(_level * _indi.params.GetSvePeriod());
