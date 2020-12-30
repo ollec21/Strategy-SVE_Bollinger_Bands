@@ -16,6 +16,7 @@ INPUT float SVE_Bollinger_Bands_PriceStopLevel = 2;        // Price stop level
 INPUT int SVE_Bollinger_Bands_TickFilterMethod = 0;        // Tick filter method
 INPUT float SVE_Bollinger_Bands_MaxSpread = 2.0;           // Max spread to trade (in pips)
 INPUT int SVE_Bollinger_Bands_Shift = 0;                   // Strategy Shift (relative to the current bar, 0 - default)
+INPUT int SVE_Bollinger_Bands_OrderCloseTime = -10;        // Order close time in mins (>0) or bars (<0)
 
 // Includes.
 #include "Indi_SVE_Bollinger_Bands.mqh"
@@ -29,8 +30,8 @@ struct Stg_SVE_Bollinger_Bands_Params_Defaults : StgParams {
                   ::SVE_Bollinger_Bands_SignalOpenLevel, ::SVE_Bollinger_Bands_SignalOpenBoostMethod,
                   ::SVE_Bollinger_Bands_SignalCloseMethod, ::SVE_Bollinger_Bands_SignalCloseLevel,
                   ::SVE_Bollinger_Bands_PriceStopMethod, ::SVE_Bollinger_Bands_PriceStopLevel,
-                  ::SVE_Bollinger_Bands_TickFilterMethod, ::SVE_Bollinger_Bands_MaxSpread,
-                  ::SVE_Bollinger_Bands_Shift) {}
+                  ::SVE_Bollinger_Bands_TickFilterMethod, ::SVE_Bollinger_Bands_MaxSpread, ::SVE_Bollinger_Bands_Shift,
+                  ::SVE_Bollinger_Bands_OrderCloseTime) {}
 } stg_svebbands_defaults;
 
 // Defines struct to store indicator and strategy params.
