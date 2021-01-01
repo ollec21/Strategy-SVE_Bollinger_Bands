@@ -7,16 +7,16 @@
 INPUT float SVE_Bollinger_Bands_LotSize = 0;               // Lot size
 INPUT int SVE_Bollinger_Bands_SignalOpenMethod = 0;        // Signal open method
 INPUT int SVE_Bollinger_Bands_SignalOpenFilterMethod = 1;  // Signal open filter method
-INPUT float SVE_Bollinger_Bands_SignalOpenLevel = 0;       // Signal open level
+INPUT float SVE_Bollinger_Bands_SignalOpenLevel = 0.0f;    // Signal open level
 INPUT int SVE_Bollinger_Bands_SignalOpenBoostMethod = 0;   // Signal open boost method
 INPUT int SVE_Bollinger_Bands_SignalCloseMethod = 0;       // Signal close method
-INPUT float SVE_Bollinger_Bands_SignalCloseLevel = 0;      // Signal close level
+INPUT float SVE_Bollinger_Bands_SignalCloseLevel = 0.0f;   // Signal close level
 INPUT int SVE_Bollinger_Bands_PriceStopMethod = 0;         // Price stop method
 INPUT float SVE_Bollinger_Bands_PriceStopLevel = 2;        // Price stop level
-INPUT int SVE_Bollinger_Bands_TickFilterMethod = 0;        // Tick filter method
-INPUT float SVE_Bollinger_Bands_MaxSpread = 2.0;           // Max spread to trade (in pips)
+INPUT int SVE_Bollinger_Bands_TickFilterMethod = 1;        // Tick filter method
+INPUT float SVE_Bollinger_Bands_MaxSpread = 4.0;           // Max spread to trade (in pips)
 INPUT int SVE_Bollinger_Bands_Shift = 0;                   // Strategy Shift (relative to the current bar, 0 - default)
-INPUT int SVE_Bollinger_Bands_OrderCloseTime = -10;        // Order close time in mins (>0) or bars (<0)
+INPUT int SVE_Bollinger_Bands_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
 
 // Includes.
 #include "Indi_SVE_Bollinger_Bands.mqh"
