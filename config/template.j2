@@ -25,7 +25,7 @@ struct Stg_SVE_Bollinger_Bands_Params_{{ Timeframe }} : StgParams {
     signal_close_method = {{ SVE_Bollinger_Bands_SignalCloseMethod | default(0) }};
     signal_close_level = (float){{ SVE_Bollinger_Bands_SignalCloseLevel | default(0) }};
     price_stop_method = {{ SVE_Bollinger_Bands_PriceStopMethod | default(0) }};
-    price_stop_level = {{ SVE_Bollinger_Bands_SignalCloseLevel | default(1) }};
+    price_stop_level = (float){{ SVE_Bollinger_Bands_SignalCloseLevel | default(1) }};
     tick_filter_method = {{ SVE_Bollinger_Bands_TickFilterMethod  | default(1) }};
     max_spread = {{ SVE_Bollinger_Bands_MaxSpread | default(0) }};
   }
