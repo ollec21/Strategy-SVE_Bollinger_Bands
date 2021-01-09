@@ -37,7 +37,7 @@ jobs:
           include: .
           init-platform: true
           mt-version: 5.0.0.2361
-          path: Indi_SVE_Bollinger_Bands.mq4
+          path: Indicators/Indi_SVE_Bollinger_Bands.mq4
           verbose: true
       - name: Copy Math includes
         run: Copy-Item -Recurse ../MetaTrader/MQL5/Include/Math Include/
@@ -51,7 +51,7 @@ jobs:
       - name: Compile indicator (MQL5)
         uses: fx31337/mql-compile-action@master
         with:
-          path: Indi_SVE_Bollinger_Bands.mq5
+          path: Indicators/Indi_SVE_Bollinger_Bands.mq5
           include: .
           mt-version: 5.0.0.2515
           verbose: true

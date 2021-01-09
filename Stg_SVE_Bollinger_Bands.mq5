@@ -15,7 +15,8 @@ input int Active_Tfs = 15;                        // Activated timeframes (1-255
 input ENUM_LOG_LEVEL Log_Level = V_INFO;          // Log level.
 input bool Info_On_Chart = true;                  // Display info on chart.
 
-// Includes main strategy class.
+// Includes local files.
+#include "Indi_SVE_Bollinger_Bands.mqh"
 #include "Stg_SVE_Bollinger_Bands.mqh"
 
 // Defines.
