@@ -7,7 +7,7 @@
 struct Indi_SVE_Bollinger_Bands_Params_{{ Timeframe }} : Indi_SVE_Bollinger_Bands_Params {
   Indi_SVE_Bollinger_Bands_Params_{{ Timeframe }}() : Indi_SVE_Bollinger_Bands_Params(indi_svebbands_defaults, PERIOD_{{ Timeframe }}) {
     applied_price = (ENUM_APPLIED_PRICE){{ SVE_Bollinger_Bands_Indi_SVE_Bollinger_Bands_Applied_Price | default(0) }};
-    ma_method = {{ SVE_Bollinger_Bands_Indi_SVE_Bollinger_Bands_MA_Method | default(0) }};
+    ma_method = (ENUM_MA_METHOD){{ SVE_Bollinger_Bands_Indi_SVE_Bollinger_Bands_MA_Method | default(0) }};
     period = {{ SVE_Bollinger_Bands_Indi_SVE_Bollinger_Bands_Period | default(0) }};
     shift = {{ SVE_Bollinger_Bands_Shift | default(0) }};
   }
