@@ -4,6 +4,8 @@
  */
 
 // User input params.
+INPUT string __SVE_Bollinger_Bands_Strategy_Params__ =
+    "-- SVE Bollinger Bands strategy params --";  // >>> SVE Bollinger Bands strategy <<<
 INPUT float SVE_Bollinger_Bands_LotSize = 0;               // Lot size
 INPUT int SVE_Bollinger_Bands_SignalOpenMethod = 0;        // Signal open method
 INPUT int SVE_Bollinger_Bands_SignalOpenFilterMethod = 1;  // Signal open filter method
