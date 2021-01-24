@@ -78,7 +78,6 @@ class Stg_SVE_Bollinger_Bands : public Strategy {
     _stg_params.SetTf(_tf, _Symbol);
     // Initialize strategy instance.
     Strategy *_strat = new Stg_SVE_Bollinger_Bands(_stg_params, "SVE BB");
-    _stg_params.SetStops(_strat, _strat);
     return _strat;
   }
 
