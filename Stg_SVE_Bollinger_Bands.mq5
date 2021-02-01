@@ -3,6 +3,9 @@
  * Implements strategy based on the SVE Bollinger Bands indicator.
  */
 
+// Includes conditional compilation directives.
+#include "config/define.h"
+
 // Includes EA31337 framework.
 #include <EA31337-classes/EA.mqh>
 #include <EA31337-classes/Indicator.mqh>
