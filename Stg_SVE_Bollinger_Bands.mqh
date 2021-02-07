@@ -4,6 +4,8 @@
  */
 
 // User input params.
+INPUT string __SVE_Bollinger_Bands_Strategy_Params__ =
+    "-- SVE Bollinger Bands strategy params --";           // >>> SVE Bollinger Bands strategy <<<
 INPUT float SVE_Bollinger_Bands_LotSize = 0;               // Lot size
 INPUT int SVE_Bollinger_Bands_SignalOpenMethod = 0;        // Signal open method
 INPUT int SVE_Bollinger_Bands_SignalOpenFilterMethod = 1;  // Signal open filter method
@@ -61,13 +63,13 @@ class Stg_SVE_Bollinger_Bands : public Strategy {
     // Initialize strategy initial values.
     Indi_SVE_Bollinger_Bands_Params _indi_params(indi_svebbands_defaults, _tf);
     StgParams _stg_params(stg_svebbands_defaults);
-    if (!Terminal::IsOptimization()) {
-      SetParamsByTf<Indi_SVE_Bollinger_Bands_Params>(_indi_params, _tf, indi_svebbands_m1, indi_svebbands_m5,
-                                                     indi_svebbands_m15, indi_svebbands_m30, indi_svebbands_h1,
-                                                     indi_svebbands_h4, indi_svebbands_h4);
-      SetParamsByTf<StgParams>(_stg_params, _tf, stg_svebbands_m1, stg_svebbands_m5, stg_svebbands_m15,
-                               stg_svebbands_m30, stg_svebbands_h1, stg_svebbands_h4, stg_svebbands_h4);
-    }
+#ifdef __config__
+    SetParamsByTf<Indi_SVE_Bollinger_Bands_Params>(_indi_params, _tf, indi_svebbands_m1, indi_svebbands_m5,
+                                                   indi_svebbands_m15, indi_svebbands_m30, indi_svebbands_h1,
+                                                   indi_svebbands_h4, indi_svebbands_h4);
+    SetParamsByTf<StgParams>(_stg_params, _tf, stg_svebbands_m1, stg_svebbands_m5, stg_svebbands_m15, stg_svebbands_m30,
+                             stg_svebbands_h1, stg_svebbands_h4, stg_svebbands_h4);
+#endif
     // Initialize indicator.
     _stg_params.SetIndicator(new Indi_SVE_Bollinger_Bands(_indi_params));
     // Initialize strategy parameters.
@@ -76,7 +78,6 @@ class Stg_SVE_Bollinger_Bands : public Strategy {
     _stg_params.SetTf(_tf, _Symbol);
     // Initialize strategy instance.
     Strategy *_strat = new Stg_SVE_Bollinger_Bands(_stg_params, "SVE BB");
-    _stg_params.SetStops(_strat, _strat);
     return _strat;
   }
 
